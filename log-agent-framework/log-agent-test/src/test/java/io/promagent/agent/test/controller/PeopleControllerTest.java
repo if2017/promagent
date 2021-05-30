@@ -2,8 +2,8 @@ package io.promagent.agent.test.controller;
 
 import com.ejlchina.okhttps.OkHttps;
 import io.promagent.agent.test.LogAgentTestApplication;
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
