@@ -10,7 +10,7 @@ public interface GradeConstants {
      * 其他日志	        自定义	default
      */
     String ERROR = "agentError";
-    String EXCEPTION = "requestException";
-    String WARN = "requestWarn";
-    String DEFAULT = "requestDefault";
+    String EXCEPTION = "reqExce";
+    String WARN = "reqWarn";
+    String DEFAULT = "reqDef";
 }

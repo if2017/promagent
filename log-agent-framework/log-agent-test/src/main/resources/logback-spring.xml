@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="logFilePath" value="${CATALINA_HOME:-..}/logs"/>
+
+    <contextName>logback</contextName>
+    <springProperty scope="context" name="appName" source="promagent.agent.appName"/>
+    <springProperty scope="context" name="appEvn" source="promagent.agent.appEvn"/>
+    <springProperty scope="context" name="serverPort" source="server.port"/>
+    <springProperty scope="context" name="logstashHost" source="log.logstash.host"/>
+    <springProperty scope="context" name="logstashPort" source="log.logstash.port"/>
+
+    <!--    <springProperty scope="context" name="logPath" source="logging.file.path"/>-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%date][%-5level][%thread][%mdc{appName}][%mdc{appEvn}][%mdc{logId}][%msg]%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Prudent>true</Prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logFilePath}/${appName}-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>2</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>[%date][%-5level][%thread][%mdc{appName}][%mdc{appEvn}][%mdc{logId}][%msg]%n</pattern>
+        </layout>
+    </appender>
+
+    <!--    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+    <!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+    <!--            <level>INFO</level>-->
+    <!--        </filter>-->
+    <!--        <destination>${logstashHost}:${logstashPort}</destination>-->
+    <!--        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">-->
+    <!--            <customFields>{"tags":["common-base-logback"]}</customFields>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!--配置logStash 服务地址 -->
+        <destination>${logstashHost}:${logstashPort}</destination>
+<!--        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">-->
+            <!--            <customFields>{"tags":[{"app":${appName}}]}</customFields>-->
+            <!--            <customFields>{"project":"myapp"}</customFields>-->
+
+<!--            <customFields>{"project":"${appName}"}</customFields>-->
+<!--        </encoder>-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "logDate": "%date",
+                        "thread": "%thread",
+                        "level": "%level",
+                        "appName": "${appName:-defapp}",
+                        "appEvn": "${appEvn:-defevn}",
+
+                        "logId": "%mdc{logId}",
+                        "msg": "%msg"
+
+                        <!--                        "serviceName": "${springAppName:-}",-->
+                        <!--                        "pid": "${PID:-}",-->
+                        <!--                        "thread": "%thread",-->
+                        <!--                        "class": "%logger{40}",-->
+                        <!--                        "rest": "%message"-->
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="logging.level.root">
+        <appender-ref ref="console"/>
+        <appender-ref ref="logFile"/>
+        <appender-ref ref="logstash"/>
+    </root>
+
+
+    <!--    <include resource="org/springframework/boot/logging/logback/base.xml" />-->
+
+
+</configuration>

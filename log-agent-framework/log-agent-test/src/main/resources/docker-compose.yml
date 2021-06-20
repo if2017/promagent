@@ -1,0 +1,46 @@
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    container_name: elasticsearch7.1.1
+    environment:
+      - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
+      - "discovery.type=single-node" #以单一节点模式启动
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置使用jvm内存大小
+      - TZ=Asia/Shanghai
+    volumes:
+      - /Users/mac/data/elasticsearch/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
+      - /Users/mac/data/elasticsearch/data:/usr/share/elasticsearch/data #数据文件挂载
+    ports:
+      - 9200:9200
+      - 9300:9300
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.1.1
+    container_name: kibana7.1.1
+    links:
+      - elasticsearch:es #可以用es这个域名访问elasticsearch服务
+    depends_on:
+      - elasticsearch #kibana在elasticsearch启动之后再启动
+    environment:
+      - "elasticsearch.hosts=http://es:9200" #设置访问elasticsearch的地址
+      - TZ=Asia/Shanghai
+    ports:
+      - 5601:5601
+    restart: always
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.1.1
+    container_name: logstash7.1.1
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+#      - /Users/mac/data/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf #挂载logstash的配置文件
+#      - /Users/mac/IdeaProjects/promagent/log-agent-framework/log-agent-test/src/main/resources/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml #挂载logstash的配置文件
+      - /Users/mac/IdeaProjects/promagent/log-agent-framework/log-agent-test/src/main/resources/logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - elasticsearch  #kibana在elasticsearch启动之后再启动
+    links:
+      - elasticsearch:es #可以用es这个域名访问elasticsearch服务
+    ports:
+      - 9600:9600
+      - 5044:5044
+    restart: always

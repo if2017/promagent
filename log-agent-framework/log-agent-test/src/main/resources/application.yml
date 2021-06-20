@@ -1,0 +1,13 @@
+promagent:
+  agent:
+    appName: logagent
+    appEvn: dev
+
+log:
+  logstash:
+    host: 127.0.0.1
+    port: 5044
+
+logging:
+  level:
+    root: info

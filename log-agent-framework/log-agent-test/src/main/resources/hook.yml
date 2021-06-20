@@ -1,11 +1,11 @@
 promagent:
   agent:
-    appName: testAgent
+    mdcLogId: logId
     headers: !!seq
       - "all"
   fastHooks:
      controllerPackage: io.promagent.agent.test.controller
-  load:
-    agentJar: "/Users/mac/IdeaProjects/promagent/log-agent-framework/log-agent-builder/target/log-agent.jar"
-
+#  load:
+#    agentJar: "/Users/mac/IdeaProjects/promagent/log-agent-framework/log-agent-builder/target/log-agent.jar"
+#
 

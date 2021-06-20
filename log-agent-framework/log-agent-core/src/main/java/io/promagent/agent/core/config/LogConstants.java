@@ -2,13 +2,13 @@ package io.promagent.agent.core.config;
 
 public interface LogConstants {
 
-    String request = "request";
+    String request = "req";
     String reg_url = "url";
     String reg_header = "header";
     String reg_params = "params";
     String reg_status = "status";
 
-    String method = "method";
+    String method = "met";
     String met_args = "args";
     String met_ret = "ret";
     String met_sign = "sign";
@@ -18,13 +18,14 @@ public interface LogConstants {
     String basic = "basic";
     String basic_sn = "sn";
     String basic_ip = "ip";
+    String basic_type = "type";
     String basic_grade = "grade";
 
-    String mdc = "mdc";
+//    String mdc = "mdc";
     String mdc_logId = System.getProperty("agent.mdcLogId");
     String mdc_appName = "appName";
     String mdc_appEvn = "appEvn";
-    String mdc_type = "type";
+//    String mdc_type = "type";
 
     String null_string = "NULL";
     String skip = "skip";

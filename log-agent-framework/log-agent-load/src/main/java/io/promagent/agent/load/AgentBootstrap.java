@@ -25,6 +25,9 @@ public class AgentBootstrap {
     @Value("${promagent.agent.appEvn}")
     private String appEvn;
 
+    @Value("${promagent.agent.appName}")
+    private String appName;
+
     private AgentConfig agentConfig = new AgentConfig();
 
     private AgentConfig.Hooks hooks;
@@ -68,7 +71,7 @@ public class AgentBootstrap {
                 FileUtils.copyInputStreamToFile(jarStream, agentJarFile);
                 load.setAgentJar(agentJarFile);
                 return;
-            }else if (agentJarFile.exists()){
+            } else if (agentJarFile.exists()) {
                 load.setAgentJar(agentJarFile);
                 return;
             }
@@ -88,14 +91,11 @@ public class AgentBootstrap {
 
     private void initSystemProperty() throws UnknownHostException {
 
-        if (StringUtils.isEmpty(this.appEvn) || this.appEvn.startsWith("$")) {
-            this.appEvn = agent.getAppEvn();
-        } else {
-            agent.setAppEvn(this.appEvn);
-        }
+        agent.setAppEvn(this.appEvn);
+        agent.setAppName(this.appName);
 
         System.setProperty("agent.ip", InetAddress.getLocalHost().getHostAddress());
-        System.setProperty("agent.appEvn", this.appEvn);
+        System.setProperty("agent.appEvn", agent.getAppEvn());
 
         System.setProperty("agent.debug", String.valueOf(agent.isDebug()));
         System.setProperty("agent.retMaxLength", String.valueOf(agent.getRetMaxLength()));

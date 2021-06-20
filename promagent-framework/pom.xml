@@ -66,7 +66,16 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
+    <distributionManagement>
+        <repository>
+            <id>Baijia_Release</id>
+            <url>https://nexus.baijia.com/repository/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>Baijia_Snapshot</id>
+            <url>https://nexus.baijia.com/repository/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 
 </project>

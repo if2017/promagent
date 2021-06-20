@@ -59,6 +59,11 @@
             <artifactId>junit</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>6.6</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -98,4 +103,14 @@
             </plugin>
         </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>Baijia_Release</id>
+            <url>https://nexus.baijia.com/repository/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>Baijia_Snapshot</id>
+            <url>https://nexus.baijia.com/repository/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
