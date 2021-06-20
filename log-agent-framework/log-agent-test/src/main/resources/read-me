@@ -1,0 +1,4 @@
+
+docker run --network=host logagenttest-ImageId
+
+docker run --network=host 07e7d995dfe6

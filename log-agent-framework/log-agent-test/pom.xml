@@ -13,6 +13,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <jarName>log-agent-test</jarName>
         <java.version>1.8</java.version>
     </properties>
 
@@ -67,6 +68,7 @@
     </dependencies>
 
     <build>
+        <finalName>${jarName}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
