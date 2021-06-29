@@ -61,15 +61,8 @@
                         "level": "%level",
                         "appName": "${appName:-defapp}",
                         "appEvn": "${appEvn:-defevn}",
-
                         "logId": "%mdc{logId}",
                         "msg": "%msg"
-
-                        <!--                        "serviceName": "${springAppName:-}",-->
-                        <!--                        "pid": "${PID:-}",-->
-                        <!--                        "thread": "%thread",-->
-                        <!--                        "class": "%logger{40}",-->
-                        <!--                        "rest": "%message"-->
                         }
                     </pattern>
                 </pattern>

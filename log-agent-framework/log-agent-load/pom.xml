@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>log-agent-load</artifactId>
+    <version>1.0-RELEASE</version>
     <dependencies>
         <dependency>
             <groupId>net.bytebuddy</groupId>
