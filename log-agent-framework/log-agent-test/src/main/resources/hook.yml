@@ -3,9 +3,10 @@ promagent:
     mdcLogId: logId
     headers: !!seq
       - "all"
-  fastHooks:
-     controllerPackage: io.promagent.agent.test.controller
+  hooks:
+    annClassHook:                                                                       # 类注解日志打印
+      "^io.promagent.agent.test.*": !!seq                                                          # 正则表达式:^com.bb.*的package
+        - "org.springframework.web.bind.annotation.RestController:ACCESS"
 #  load:
 #    agentJar: "/Users/mac/IdeaProjects/promagent/log-agent-framework/log-agent-builder/target/log-agent.jar"
-#
-
+#    agentJar: "/Users/javazhangyi/IdeaProjects/promagent/log-agent-framework/log-agent-builder/target/log-agent.jar"
