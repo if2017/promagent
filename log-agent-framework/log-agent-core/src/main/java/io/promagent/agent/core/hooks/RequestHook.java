@@ -100,7 +100,16 @@ public class RequestHook {
                     grade = GradeConstants.WARN;
                     ret = LogObjectProxy.getTempData().getString(LogConstants.HandlerInterceptorSign);
                 }
-                LogObjectProxy.doLog(exec, grade, null, ret, signature, TypeConstants.FILTER, null);
+                if (CollectionUtils.isEmpty(LogConfig.filterIgnoreUrls)) {
+                    LogObjectProxy.doLog(exec, grade, null, ret, signature, TypeConstants.FILTER, null);
+                } else {
+                    final String url = httpServletRequest.getRequestURI();
+                    if (LogConfig.filterIgnoreUrls.stream().anyMatch(x -> url.matches(x))){
+                        // not log for filter
+                    }else {
+                        LogObjectProxy.doLog(exec, grade, null, ret, signature, TypeConstants.FILTER, null);
+                    }
+                }
 
                 LogObjectProxy.Clean();
             }

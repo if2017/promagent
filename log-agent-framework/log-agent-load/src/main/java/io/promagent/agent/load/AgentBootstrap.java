@@ -108,6 +108,7 @@ public class AgentBootstrap {
 
         System.setProperty("agent.headers", JSONObject.toJSONString(agent.getHeaders()));
         System.setProperty("agent.ignoreSignatures", JSONObject.toJSONString(agent.getIgnoreSignatures()));
+        System.setProperty("agent.filterIgnoreUrls", JSONObject.toJSONString(agent.getFilterIgnoreUrls()));
         System.setProperty("agent.skipRetSignatures", JSONObject.toJSONString(agent.getSkipRetSignatures()));
 
         if (!StringUtils.isEmpty(fastHooks.getControllerPackage())) {

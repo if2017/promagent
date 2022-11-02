@@ -54,6 +54,7 @@ public class AgentConfig {
 
         private List<String> headers = Arrays.asList("none");
         private List<String> ignoreSignatures = new ArrayList<>();
+        private List<String> filterIgnoreUrls = new ArrayList<>();
         private List<String> skipRetSignatures = new ArrayList<>();
     }
 

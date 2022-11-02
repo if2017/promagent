@@ -16,6 +16,7 @@ public class LogConfig {
     public static String appEvn = System.getProperty("agent.appEvn");
     public static List<String> headers = JSONArray.parseArray(System.getProperty("agent.headers"), String.class);
     public static List<String> ignoreSignatures = JSONArray.parseArray(System.getProperty("agent.ignoreSignatures"), String.class);
+    public static List<String> filterIgnoreUrls = JSONArray.parseArray(System.getProperty("agent.filterIgnoreUrls"), String.class);
     public static List<String> skipRetSignatures = JSONArray.parseArray(System.getProperty("agent.skipRetSignatures"), String.class);
 
     public static Map<String, String> typeCache = new ConcurrentHashMap<>();
