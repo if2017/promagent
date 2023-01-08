@@ -22,11 +22,17 @@ import java.net.UnknownHostException;
 @Slf4j
 public class AgentBootstrap {
 
-    @Value("${promagent.agent.appEvn}")
+    @Value("${spring.profiles.active}")
     private String appEvn;
 
-    @Value("${promagent.agent.appName}")
+    @Value("${spring.application.name}")
     private String appName;
+
+    @Value("${promagent.agent.on-off:false}")
+    private boolean onOff;
+
+    @Value("${promagent.agent.hook-url:/hook.yml}")
+    private String hookUrl;
 
     private AgentConfig agentConfig = new AgentConfig();
 
@@ -37,19 +43,23 @@ public class AgentBootstrap {
 
     @PostConstruct
     public void init() {
-        try {
-            if (!StringUtils.isEmpty(System.getProperty("agent.appEvn"))) {
-                throw new RuntimeException("已加载agent");
+        if (onOff) {
+            try {
+                if (!StringUtils.isEmpty(System.getProperty("agent.appEvn"))) {
+                    throw new RuntimeException("已加载agent");
+                }
+                initAgentConfig();
+                initAgentJar();
+                initSystemProperty();
+                loadAgent();
+            } catch (Throwable e) {
+                log.error(ExceptionUtils.getStackTrace(e));
+            } finally {
+                System.err.println(JSONObject.toJSONString(agentConfig, true));
+                log.info(JSONObject.toJSONString(agentConfig));
             }
-            initAgentConfig();
-            initAgentJar();
-            initSystemProperty();
-            loadAgent();
-        } catch (Throwable e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-        } finally {
-            System.err.println(JSONObject.toJSONString(agentConfig, true));
-            log.info(JSONObject.toJSONString(agentConfig));
+        } else {
+            log.info("proagent onOff clone");
         }
     }
 
@@ -64,7 +74,7 @@ public class AgentBootstrap {
         if (!StringUtils.isEmpty(load.getAgentJar())) {
             return;
         }
-        String jarName = "/log-agent.jar";
+        String jarName = "/io/promagent/agent/load/log-agent.jar";
         try (InputStream jarStream = getClass().getResourceAsStream(jarName)) {
             File agentJarFile = new File(System.getProperty("java.io.tmpdir") + File.separator + agent.getAppName(), jarName);
             if (jarStream != null) {
@@ -80,7 +90,7 @@ public class AgentBootstrap {
     }
 
     private void initAgentConfig() throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("/hook.yml")) {
+        try (InputStream inputStream = getClass().getResourceAsStream(hookUrl)) {
             agentConfig = new Yaml().loadAs(inputStream, AgentConfig.AgentConfigPrefix.class).getPromagent();
             this.agent = agentConfig.getAgent();
             this.load = agentConfig.getLoad();

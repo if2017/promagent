@@ -56,7 +56,7 @@
                 <module>log-agent-builder</module>
                 <module>log-agent-core</module>
                 <module>log-agent-load</module>
-                <module>log-agent-test</module>
+<!--                <module>log-agent-test</module>-->
             </modules>
         </profile>
     </profiles>
@@ -84,8 +84,8 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
+                        <source>1.8</source>
+                        <target>1.8</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -108,53 +108,31 @@
                     </configuration>
                 </plugin>
 
-<!--                <plugin>-->
-<!--                    <artifactId>maven-deploy-plugin</artifactId>-->
-<!--                    <version>2.8.2</version>-->
-<!--                    <configuration>-->
-<!--                        <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>-->
-<!--                    </configuration>-->
-<!--                </plugin>-->
-
-<!--                <plugin>-->
-<!--                    <groupId>com.github.github</groupId>-->
-<!--                    <artifactId>site-maven-plugin</artifactId>-->
-<!--                    <version>0.12</version>-->
-<!--                    <configuration>-->
-<!--                        <server>github</server>-->
-<!--                        <message >Maven artifacts for ${project.version}</message>-->
-<!--                        <noJekyll>true</noJekyll>-->
-<!--                        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>&lt;!&ndash;本地jar地址&ndash;&gt;-->
-<!--                        <branch>refs/heads/master</branch>&lt;!&ndash;分支的名称&ndash;&gt;-->
-<!--                        <merge>true</merge>-->
-<!--                        <includes>-->
-<!--                            <include>**/*</include>-->
-<!--                        </includes>-->
-<!--                        <repositoryName>promagent</repositoryName>&lt;!&ndash;对应github上创建的仓库名称 name&ndash;&gt;-->
-<!--                        <repositoryOwner>javazhangyi</repositoryOwner>&lt;!&ndash;github 仓库所有者即登录用户名&ndash;&gt;-->
-<!--                    </configuration>-->
-<!--                    <executions>-->
-<!--                        <execution>-->
-<!--                            <goals>-->
-<!--                                <goal>site</goal>-->
-<!--                            </goals>-->
-<!--                            <phase>install</phase>-->
-<!--                        </execution>-->
-<!--                    </executions>-->
-<!--                </plugin>-->
-
-
             </plugins>
         </pluginManagement>
+
+
     </build>
+
+    <!--    上传地址-->
     <distributionManagement>
-        <repository>
-            <id>Baijia_Release</id>
-            <url>https://nexus.baijia.com/repository/releases/</url>
-        </repository>
         <snapshotRepository>
-            <id>Baijia_Snapshot</id>
-            <url>https://nexus.baijia.com/repository/snapshots/</url>
+            <id>snapshots</id>
+            <url>http://211.157.162.107:6100/repository/cbest-snapshots-hosted/</url>
         </snapshotRepository>
+        <repository>
+            <id>central</id>
+            <url>http://211.157.162.107:6100/repository/cbest-releases-hosted/</url>
+        </repository>
     </distributionManagement>
+
+    <!--	下载地址-->
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>http://211.157.162.107:6100/repository/maven-public2/</url>
+        </repository>
+    </repositories>
+
+
 </project>

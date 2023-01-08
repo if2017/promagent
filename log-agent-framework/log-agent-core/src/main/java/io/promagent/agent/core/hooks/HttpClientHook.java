@@ -20,56 +20,56 @@ import org.apache.http.protocol.HttpContext;
  * @Author:zhangyi
  * @Date:2019/9/25
  */
-@Hook(instruments = {
-        "org.apache.http.client.HttpClient"
-})
+//@Hook(instruments = {
+//        "org.apache.http.client.HttpClient"
+//})
 public class HttpClientHook {
-
-    private void addHeader(HttpMessage httpMessage) {
-        try {
-            httpMessage.addHeader(LogConfig.TRACE_ID, MdcUtils.getLogId());
-        } catch (Throwable e) {
-            Logger.error(e);
-        }
-    }
-
-    @Before(method = {"execute"})
-    public void execute(HttpUriRequest httpUriRequest) {
-        addHeader(httpUriRequest);
-    }
-
-    @Before(method = {"execute"})
-    public void execute(HttpUriRequest httpUriRequest, HttpContext httpContext) {
-        addHeader(httpUriRequest);
-    }
-
-    @Before(method = {"execute"})
-    public void execute(HttpHost httpHost, HttpRequest httpRequest) {
-        addHeader(httpRequest);
-    }
-
-    @Before(method = {"execute"})
-    public void execute(HttpHost httpHost, HttpRequest httpRequest, HttpContext httpContext) {
-        addHeader(httpRequest);
-    }
-
-    @Before(method = {"execute"})
-    public void execute(HttpUriRequest httpUriRequest, ResponseHandler responseHandler) {
-        addHeader(httpUriRequest);
-    }
-
-    @Before(method = {"execute"})
-    public void execute(HttpUriRequest httpUriRequest, ResponseHandler responseHandler, HttpContext httpContext) {
-        addHeader(httpUriRequest);
-    }
-
-    @Before(method = {"execute"})
-    public void execute(HttpHost httpHost, HttpRequest httpRequest, ResponseHandler responseHandler) {
-        addHeader(httpRequest);
-    }
-
-    @Before(method = {"execute"})
-    public void execute(HttpHost httpHost, HttpRequest httpRequest, ResponseHandler responseHandler, HttpContext httpContext) {
-        addHeader(httpRequest);
-    }
+//
+//    private void addHeader(HttpMessage httpMessage) {
+//        try {
+//            httpMessage.addHeader(LogConfig.TRACE_ID, MdcUtils.getLogId());
+//        } catch (Throwable e) {
+//            Logger.error(e);
+//        }
+//    }
+//
+//    @Before(method = {"execute"})
+//    public void execute(HttpUriRequest httpUriRequest) {
+//        addHeader(httpUriRequest);
+//    }
+//
+//    @Before(method = {"execute"})
+//    public void execute(HttpUriRequest httpUriRequest, HttpContext httpContext) {
+//        addHeader(httpUriRequest);
+//    }
+//
+//    @Before(method = {"execute"})
+//    public void execute(HttpHost httpHost, HttpRequest httpRequest) {
+//        addHeader(httpRequest);
+//    }
+//
+//    @Before(method = {"execute"})
+//    public void execute(HttpHost httpHost, HttpRequest httpRequest, HttpContext httpContext) {
+//        addHeader(httpRequest);
+//    }
+//
+//    @Before(method = {"execute"})
+//    public void execute(HttpUriRequest httpUriRequest, ResponseHandler responseHandler) {
+//        addHeader(httpUriRequest);
+//    }
+//
+//    @Before(method = {"execute"})
+//    public void execute(HttpUriRequest httpUriRequest, ResponseHandler responseHandler, HttpContext httpContext) {
+//        addHeader(httpUriRequest);
+//    }
+//
+//    @Before(method = {"execute"})
+//    public void execute(HttpHost httpHost, HttpRequest httpRequest, ResponseHandler responseHandler) {
+//        addHeader(httpRequest);
+//    }
+//
+//    @Before(method = {"execute"})
+//    public void execute(HttpHost httpHost, HttpRequest httpRequest, ResponseHandler responseHandler, HttpContext httpContext) {
+//        addHeader(httpRequest);
+//    }
 }

@@ -12,8 +12,8 @@ public class LogConfig {
     public static String TRACE_ID = System.getProperty("agent.traceId");
     public static String IP = System.getProperty("agent.ip");
     public static int RET_MAX_LENGTH = Integer.parseInt(System.getProperty("agent.retMaxLength"));
-    public static String appName = System.getProperty("agent.appName");
-    public static String appEvn = System.getProperty("agent.appEvn");
+//    public static String appName = System.getProperty("agent.appName");
+//    public static String appEvn = System.getProperty("agent.appEvn");
     public static List<String> headers = JSONArray.parseArray(System.getProperty("agent.headers"), String.class);
     public static List<String> ignoreSignatures = JSONArray.parseArray(System.getProperty("agent.ignoreSignatures"), String.class);
     public static List<String> filterIgnoreUrls = JSONArray.parseArray(System.getProperty("agent.filterIgnoreUrls"), String.class);

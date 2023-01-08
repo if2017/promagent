@@ -66,16 +66,25 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <!--    上传地址-->
     <distributionManagement>
-        <repository>
-            <id>Baijia_Release</id>
-            <url>https://nexus.baijia.com/repository/releases/</url>
-        </repository>
         <snapshotRepository>
-            <id>Baijia_Snapshot</id>
-            <url>https://nexus.baijia.com/repository/snapshots/</url>
+            <id>snapshots</id>
+            <url>http://211.157.162.107:6100/repository/cbest-snapshots-hosted/</url>
         </snapshotRepository>
+        <repository>
+            <id>central</id>
+            <url>http://211.157.162.107:6100/repository/cbest-releases-hosted/</url>
+        </repository>
     </distributionManagement>
+
+    <!--	下载地址-->
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>http://211.157.162.107:6100/repository/maven-public2/</url>
+        </repository>
+    </repositories>
 
 
 </project>

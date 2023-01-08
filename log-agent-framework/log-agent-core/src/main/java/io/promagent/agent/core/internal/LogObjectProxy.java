@@ -2,9 +2,9 @@ package io.promagent.agent.core.internal;
 
 
 import com.alibaba.fastjson.JSONObject;
-
 import io.promagent.agent.core.config.GradeConstants;
 import io.promagent.agent.core.config.TypeConstants;
+import io.promagent.agent.core.utils.MdcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,16 @@ public class LogObjectProxy {
         String msg = HttpContext.get()
                 .setMethod(exec, error, ret, sign, args, type, grade)
                 .getLogJson();
-        logger.info(msg);
+        try {
+            MdcUtils.setMdcAgentMsg(msg);
+            logger.info("agentLog");
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.info("agentLog" + e.getMessage());
+        } finally {
+            MdcUtils.setMdcAgentMsg("");
+        }
+
     }
 
     /**
@@ -58,7 +67,16 @@ public class LogObjectProxy {
         String msg = HttpContext.get()
                 .setMethod(null, error, null, null, null, TypeConstants.FRAME, GradeConstants.ERROR)
                 .getLogJson();
-        logger.info(msg);
+        try {
+            MdcUtils.setMdcAgentMsg(msg);
+            logger.info("agentLog");
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.info("agentLog" + e.getMessage());
+        } finally {
+            MdcUtils.setMdcAgentMsg("");
+        }
+
     }
 
     private static class HttpContext {
