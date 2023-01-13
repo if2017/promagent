@@ -55,7 +55,7 @@ public class RequestHook {
 
                 LogObjectProxy.getTempData().put(LogConstants.RequestTimeStamp, System.currentTimeMillis());
                 HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-                MdcUtils.setLogId(httpServletRequest.getHeader(LogConfig.TRACE_ID));
+//                MdcUtils.setLogId(httpServletRequest.getHeader(LogConfig.TRACE_ID));
 
                 Map<String, String> headers = RequestUtils.getHeaders(httpServletRequest);
 

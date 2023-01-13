@@ -17,7 +17,7 @@ import java.util.Map;
  * @Date:2019/7/19
  */
 public class LogObjectProxy {
-    private static final Logger logger = LoggerFactory.getLogger(LogObjectProxy.class);
+    private static final Logger logger = LoggerFactory.getLogger("AgentLogger");
 
     public static JSONObject getTempData() {
         return HttpContext.get().getTempData();
@@ -45,16 +45,7 @@ public class LogObjectProxy {
         String msg = HttpContext.get()
                 .setMethod(exec, error, ret, sign, args, type, grade)
                 .getLogJson();
-        try {
-            MdcUtils.setMdcAgentMsg(msg);
-            logger.info("agentLog");
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.info("agentLog" + e.getMessage());
-        } finally {
-            MdcUtils.setMdcAgentMsg("");
-        }
-
+        logger.info(msg);
     }
 
     /**
@@ -67,16 +58,7 @@ public class LogObjectProxy {
         String msg = HttpContext.get()
                 .setMethod(null, error, null, null, null, TypeConstants.FRAME, GradeConstants.ERROR)
                 .getLogJson();
-        try {
-            MdcUtils.setMdcAgentMsg(msg);
-            logger.info("agentLog");
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.info("agentLog" + e.getMessage());
-        } finally {
-            MdcUtils.setMdcAgentMsg("");
-        }
-
+        logger.info(msg);
     }
 
     private static class HttpContext {

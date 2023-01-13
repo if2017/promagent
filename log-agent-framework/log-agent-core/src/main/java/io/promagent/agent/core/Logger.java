@@ -37,7 +37,7 @@ public class Logger {
         LogObjectProxy.doLog(exce, GradeConstants.DEFAULT, error, ret, MethodUtils.getSignature(met), type, args);
         //初始化下一次的logId
         LogObjectProxy.Clean();
-        MdcUtils.setLogId(null);
+//        MdcUtils.setLogId(null);
     }
 
     public static void hessianInfo(Long exce, Throwable error, Object ret, Method met, Object... args) {
@@ -45,7 +45,7 @@ public class Logger {
     }
 
     public static void syncInfo(Throwable error, String logId, Object ret) {
-        MdcUtils.setLogId(logId);
+//        MdcUtils.setLogId(logId);
         LogObjectProxy.doLog(null, GradeConstants.DEFAULT, error, ret, null, TypeConstants.SYNC, null);
     }
     public static void error(Throwable frameError) {
