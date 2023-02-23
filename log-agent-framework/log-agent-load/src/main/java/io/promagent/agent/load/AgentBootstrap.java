@@ -96,13 +96,12 @@ public class AgentBootstrap {
             this.load = agentConfig.getLoad();
             this.hooks = agentConfig.getHooks();
             this.fastHooks = agentConfig.getFastHooks();
+            this.agent.setAppEvn(appEvn);
+            this.agent.setAppName(appName);
         }
     }
 
     private void initSystemProperty() throws UnknownHostException {
-
-        agent.setAppEvn(this.appEvn);
-        agent.setAppName(this.appName);
 
         System.setProperty("agent.ip", InetAddress.getLocalHost().getHostAddress());
         System.setProperty("agent.appEvn", agent.getAppEvn());

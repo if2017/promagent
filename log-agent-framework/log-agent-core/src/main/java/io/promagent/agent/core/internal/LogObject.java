@@ -14,6 +14,7 @@ import io.promagent.agent.core.utils.ThrowableUtils;
 import lombok.Getter;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LogObject {
@@ -60,7 +61,7 @@ public class LogObject {
             method.remove(LogConstants.met_thrown);
         } else {
             // 避免对同一个异常多次打印
-            if (StringUtils.isEmpty(beforeError) || !error.getMessage().contains(beforeError)) {
+            if (StringUtils.isEmpty(beforeError) || (Objects.nonNull(error.getMessage())&&!error.getMessage().contains(beforeError))) {
                 this.grade = GradeConstants.EXCEPTION;
                 method.put(LogConstants.met_thrown, ThrowableUtils.getStackTrace(error));
                 beforeError = error.getMessage();

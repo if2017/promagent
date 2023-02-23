@@ -26,7 +26,7 @@ public class MdcUtils {
 ////        MDC.put(LogConstants.mdc_appEvn, LogConfig.appEvn);
 //    }
 //
-//    public static void setMdcAgentMsg(String val) {
-//        MDC.put(LogConstants.mdc_aop_msg, val);
-//    }
+    public static void setAopMsg(String val) {
+        MDC.put(LogConstants.mdc_aop_msg, val);
+    }
 }

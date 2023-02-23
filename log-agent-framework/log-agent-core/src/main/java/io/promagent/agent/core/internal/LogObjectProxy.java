@@ -45,7 +45,8 @@ public class LogObjectProxy {
         String msg = HttpContext.get()
                 .setMethod(exec, error, ret, sign, args, type, grade)
                 .getLogJson();
-        logger.info(msg);
+        MdcUtils.setAopMsg(msg);
+        logger.info("-");
     }
 
     /**
@@ -58,7 +59,8 @@ public class LogObjectProxy {
         String msg = HttpContext.get()
                 .setMethod(null, error, null, null, null, TypeConstants.FRAME, GradeConstants.ERROR)
                 .getLogJson();
-        logger.info(msg);
+        MdcUtils.setAopMsg(msg);
+        logger.info("-");
     }
 
     private static class HttpContext {

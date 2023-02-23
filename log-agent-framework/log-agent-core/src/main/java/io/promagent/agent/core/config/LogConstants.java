@@ -26,7 +26,7 @@ public interface LogConstants {
 //    String mdc_appName = "appName";
 //    String mdc_appEvn = "appEvn";
 
-//    String mdc_aop_msg= "aopMsg";
+    String mdc_aop_msg= "aop";
 //    String mdc_type = "type";
 
     String null_string = "NULL";
