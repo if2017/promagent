@@ -19,6 +19,10 @@ import java.util.Map;
 public class LogObjectProxy {
     private static final Logger logger = LoggerFactory.getLogger("AgentLogger");
 
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> LogObjectProxy.Clean()));
+    }
+
     public static JSONObject getTempData() {
         return HttpContext.get().getTempData();
     }
@@ -41,6 +45,7 @@ public class LogObjectProxy {
      * @param args
      * @param type
      */
+
     public static void doLog(Long exec, String grade, Throwable error, Object ret, String sign, String type, Object... args) {
         String msg = HttpContext.get()
                 .setMethod(exec, error, ret, sign, args, type, grade)

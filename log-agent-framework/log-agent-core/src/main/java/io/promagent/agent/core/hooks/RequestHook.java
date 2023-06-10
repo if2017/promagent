@@ -115,6 +115,8 @@ public class RequestHook {
             }
         } catch (Throwable e) {
             Logger.error(e);
+        }finally {
+            LogObjectProxy.Clean();
         }
     }
 }
