@@ -33,7 +33,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /Users/javazhangyi/IdeaProjects/github/promagent/log-agent-framework/log-agent-test/src/main/resources/logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     depends_on:
       - elasticsearch  #kibana在elasticsearch启动之后再启动
     links:

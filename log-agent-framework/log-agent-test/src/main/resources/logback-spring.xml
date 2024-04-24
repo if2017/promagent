@@ -4,6 +4,6 @@
     <springProperty scope="context" name="appName" source="spring.application.name"/>
     <springProperty scope="context" name="appEvn" source="spring.profiles.active"/>
 
-    <property name="logPath" value="/data/logs/test"/>
+    <property name="logPath" value="./"/>
     <include resource="logback/logback-include.xml"/>
 </configuration>

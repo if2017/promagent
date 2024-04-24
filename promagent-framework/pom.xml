@@ -24,32 +24,12 @@
         <junit5.version>5.3.1</junit5.version>
     </properties>
 
-    <profiles>
-
-        <profile>
-            <id>promagent-loader</id>
-            <modules>
-                <module>promagent-agent</module>
-                <module>promagent-api</module>
-                <module>promagent-internal</module>
-                <module>promagent-maven-plugin</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>promagent-agent</module>
-                <module>promagent-api</module>
-                <module>promagent-internal</module>
-                <module>promagent-maven-plugin</module>
-            </modules>
-        </profile>
-
-    </profiles>
+    <modules>
+        <module>promagent-agent</module>
+        <module>promagent-api</module>
+        <module>promagent-internal</module>
+        <module>promagent-maven-plugin</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -66,25 +46,18 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <!--    上传地址-->
-    <distributionManagement>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <url>http://211.157.162.107:6100/repository/cbest-snapshots-hosted/</url>
-        </snapshotRepository>
-        <repository>
-            <id>central</id>
-            <url>http://211.157.162.107:6100/repository/cbest-releases-hosted/</url>
-        </repository>
-    </distributionManagement>
-
-    <!--	下载地址-->
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://211.157.162.107:6100/repository/maven-public2/</url>
-        </repository>
-    </repositories>
+<!--    &lt;!&ndash;    上传地址&ndash;&gt;-->
+<!--    <distributionManagement>-->
+<!--        <snapshotRepository>-->
+<!--            <id>snapshots</id>-->
+<!--            <url></url>-->
+<!--        </snapshotRepository>-->
+<!--        <repository>-->
+<!--            <id>central</id>-->
+<!--            <url></url>-->
+<!--        </repository>-->
+<!--    </distributionManagement>-->
+<!--    -->
 
 
 </project>

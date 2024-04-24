@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<included>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+  <!-- 控制台输出 -->
+<!--  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+<!--      <level>INFO</level>-->
+<!--    </filter>-->
+<!--    &lt;!&ndash; 日志输出编码 &ndash;&gt;-->
+<!--    <encoder>-->
+<!--      <pattern>-->
+<!--        {"ld":"%d","le":"%level","th":"%thread","${appName}":"${appEvn}","aop":%mdc{aop},"msg":"%msg %mdc{preIvkApp}"}%n-->
+<!--      </pattern>-->
+<!--      <charset>utf8</charset>-->
+<!--    </encoder>-->
+<!--  </appender>-->
+
+
+  <!--logstash配置-->
+  <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+    <destination>127.0.0.1:5044</destination>
+    <!-- 日志输出编码 -->
+    <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+      <providers>
+        <timestamp>
+          <timeZone>UTC</timeZone>
+        </timestamp>
+        <pattern>
+            {"ld":"%d","le":"%level","th":"%thread","${appName}":"${appEvn}","aop":%mdc{aop},"msg":"%msg %mdc{preIvkApp}"}%n
+        </pattern>
+      </providers>
+    </encoder>
+    <!--<encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>-->
+  </appender>
+
+  <!-- 按照每天生成日志文件 -->
+  <appender name="FileLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- 因为服务无损发布，会同时两个同名 jar 一起存活，于是造成日志并发问题
+      解决办法
+      1、不压缩，或造成磁盘很快用完
+      2、取消 <file>${logPath}/info.log</file> ，直接压缩  会存在日志丢失问题
+      3、保证一个实例，但是 不符合 无损发布
+      参考：https://blog.csdn.net/fly_leopard/article/details/103633374
+     -->
+<!--    <file>${logPath}/info.log</file>-->
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!--日志文件输出的文件名 -->
+      <FileNamePattern>${logPath}/info.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+      <!--日志文件保留天数 -->
+      <MaxHistory>${maxHistory}</MaxHistory>
+      <cleanHistoryOnStart>true</cleanHistoryOnStart>
+    </rollingPolicy>
+    <encoder class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+      <pattern>${FILE_LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="AgentLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+<!--    <file>${logPath}/agent.log</file>-->
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!--日志文件输出的文件名 -->
+      <FileNamePattern>${logPath}/agent.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+      <!--日志文件保留天数 -->
+      <MaxHistory>${maxHistory}</MaxHistory>
+      <cleanHistoryOnStart>true</cleanHistoryOnStart>
+    </rollingPolicy>
+    <encoder class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+      <pattern>
+        {"ld":"%d","le":"%level","th":"%thread","${appName}":"${appEvn}","aop":%mdc{aop},"msg":"%msg %mdc{preIvkApp}"}%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="FileLogAppender"/>
+    <appender-ref ref="LOGSTASH"/>
+<!--    <appender-ref ref="AgentLogAppender"/>-->
+  </root>
+
+  <logger name="AgentLogger" level="INFO" additivity="false">
+    <appender-ref ref="AgentLogAppender"/>
+  </logger>
+</included>

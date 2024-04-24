@@ -13,3 +13,7 @@ spring:
     active: test
   application:
     name: testApp
+
+promagent:
+  agent:
+    on-off: true
