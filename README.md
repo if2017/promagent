@@ -1,5 +1,12 @@
 ## 背景
-企业以springboot框架作为一个业务开发的脚手架，随着业务的迭代，以及访问量提升，服务实例递增，会导致海量日志产生；无规则的海量日志会存在以下问题 1、日志与日志之间缺少关联关系 （如果找到用户一次请求的所有日志）2、日志信息不全（该打印的时候没有打印，不该打印的打印）如果业务发生异常，开发者第一时间很难从海量的日志，第一时间定位相关问题，3、日志难以清洗，BPM插件就是解决以上问题，并且可以提供以开发视角的定义业务异常从而业务报警
+企业以springboot框架作为一个业务开发的脚手架，随着业务的迭代，以及访问量提升，服务实例递增，会导致海量日志产生；无规则的海量日志会存在以下问题
+- 1、日志与日志之间缺少关联关系
+- 2、日志信息维度不全，无法定位问题
+- 3、日志难以清洗，直接形成报表比较难
+- 4、服务出现问题，开发者感知慢造成业务损失
+- 5、开发者定义业务异常维度不够，容易误报漏报服务异常
+- 6、日志代码散落在各个角落，代码不够精简，项目难以维护
+
 ## 什么是bpm
 bpm 是 Business Performance Management 缩写，log-agent-framework是bpm 的实现，它是一款日志中间是一款基于java agent 的日志插件，用于结构化输出日志数据，便于后期的问题排查，以及业务的报警；通过maven接入，将spring 项目的日志以json输出。
 ## 产品定位
@@ -7,8 +14,8 @@ bpm 是 Business Performance Management 缩写，log-agent-framework是bpm 的�
 | --- | --- | --- |
 | NPM | 用于监控设施的基础信息，如网络、io、cpu 等，一般运维使用 | prometheus |
 | APM | 用于监控应用的数据链路，日志数据大，且详细，一般运维使用 | pinpoint、SkyWalking |
-| **BPM** | **用于监控重要业务，日志量少，且精确，一般开发人员使用** | 
- |
+| **BPM** | **用于监控重要业务，日志量少，且精确，一般开发人员使用** |
+|
 
 ## 优点
 
@@ -20,17 +27,17 @@ bpm 是 Business Performance Management 缩写，log-agent-framework是bpm 的�
     它是刻意产生，并且有目的搬运、清洗、存贮，最终消费的信息流，为用户提供更好的服务；并不是所有的日志都是日志数据，对用户有意义的日志，并且耗费精力维护，才能称为日志数据。
 ## 什么时候用
 
--  后端开发人员排查bug，定位问题 
--  前端人员开发优化资源加载性能 
--  leader 需要重要报表数据，提供决策 
--  异常报警 
+-  后端开发人员排查bug，定位问题
+-  前端人员开发优化资源加载性能
+-  leader 需要重要报表数据，提供决策
+-  异常报警
 ## 如何构建日志系统
 
--  日志生产：规定日志规范json，以及实现 
--  日志搬运：sdk、filebeat、日志汇总、阿里日志服务、oss 
--  日志清洗：logstash、json、脚印、柯南系统、es 
--  日志存贮：hive、es、mysql 
--  日志消费：kibana、grafa、报警、报表 
+-  日志生产：规定日志规范json，以及实现
+-  日志搬运：sdk、filebeat、日志汇总、阿里日志服务、oss
+-  日志清洗：logstash、json、脚印、柯南系统、es
+-  日志存贮：hive、es、mysql
+-  日志消费：kibana、grafa、报警、报表
 ## 日志级别选型
 | 建议 | 日志级别 | 保留时间 |
 | --- | --- | --- |
@@ -56,43 +63,43 @@ bpm 是 Business Performance Management 缩写，log-agent-framework是bpm 的�
 [@DeleteMapping ](/DeleteMapping )
 [@PutMapping ](/PutMapping ) |  |
 | 正则切面 | "^com.bb.bbfff.code.util.HttpUtils$:THIRD": !!seq
- - "[a-zA-Z].*" |  |
-| 精确切面 |  |  |
+- "[a-zA-Z].*" |  |
+  | 精确切面 |  |  |
 
 
 ```
 ```
 精确切面 配置
 @HOOk
-   instruments：array【injectionClass】
-   skipNestedCalls：boolean【跳过嵌套切点，默认true】
-   
+instruments：array【injectionClass】
+skipNestedCalls：boolean【跳过嵌套切点，默认true】
+
 eg:@Hook(instruments = {"javax.servlet.http.HttpServlet"})
 
 
 @Before
-    method：array【injectionMethod】
-    备注:默认还通过参数的类型，和个数匹配
-    
+method：array【injectionMethod】
+备注:默认还通过参数的类型，和个数匹配
+
 eg:@Before(method = {"addRequestHeaders"})
-    public void before(HessianConnection conn) {
-         LogUtils.insertEmptyAccessId();
-         conn.addHeader(LogConstants.HEADER_REQUEST_ID, LogUtils.getAccessId());
-    }
-    
-    
+public void before(HessianConnection conn) {
+LogUtils.insertEmptyAccessId();
+conn.addHeader(LogConstants.HEADER_REQUEST_ID, LogUtils.getAccessId());
+}
+
+
 @After：
-    method：array【injectionMethod】
-         @Return ：Object【返回值】
-         @Thrown：Thrown【方法异常】
-    备注:默认还通过参数的类型，和个数匹配
-    
+method：array【injectionMethod】
+@Return ：Object【返回值】
+@Thrown：Thrown【方法异常】
+备注:默认还通过参数的类型，和个数匹配
+
 eg:@After(method = {"invoke"})
-    public void after(Object proxy, Method method, Object[] args, @Returned Object ret, @Thrown Throwable t) {
-         String executeTime = LogUtils.getContext(method.toString());
-         executeTime = String.valueOf(System.currentTimeMillis() - Long.parseLong(executeTime));
-         LogUtils.hessianLog(executeTime, t, ret, method, args);
-    }
+public void after(Object proxy, Method method, Object[] args, @Returned Object ret, @Thrown Throwable t) {
+String executeTime = LogUtils.getContext(method.toString());
+executeTime = String.valueOf(System.currentTimeMillis() - Long.parseLong(executeTime));
+LogUtils.hessianLog(executeTime, t, ret, method, args);
+}
 ```
 
 callbackMethodName和callbackFrameErrorMethodName传递参数类型
@@ -157,9 +164,9 @@ callbackMethodName和callbackFrameErrorMethodName传递参数类型
 ```
 ### ClasssLoader 加载
 
--  对于agent，他的平级目录class文件是被appClassLoader引用，promagent-agent下面的四个class，可被全局的class所访问 
--  ClassLoaderCache作为单例，不同的classLoader，例如webappClassLoader回调的时候，ClassLoaderCache会将共享的jar分享出去 
--  因为ClassLoaderCache先查询 sharedClassLoader，ClassLoaderCache单例，所以sharedClassLoader对象唯一，所以全局会共享一个Delegator【Delegator用于精确匹配回调方法】 
+-  对于agent，他的平级目录class文件是被appClassLoader引用，promagent-agent下面的四个class，可被全局的class所访问
+-  ClassLoaderCache作为单例，不同的classLoader，例如webappClassLoader回调的时候，ClassLoaderCache会将共享的jar分享出去
+-  因为ClassLoaderCache先查询 sharedClassLoader，ClassLoaderCache单例，所以sharedClassLoader对象唯一，所以全局会共享一个Delegator【Delegator用于精确匹配回调方法】
 
 项目接入：
 
@@ -224,9 +231,15 @@ _备注：更多配置文件先hook 说明_
     为了是用户无感知升级，建议通过jvm参数，统一配置管理，以及升级
 ### 后期规划
 
--  spring boot 自动加载 
--  配置文件动态更新 
+-  spring boot 自动加载
+-  配置文件动态更新
 ### 问题反馈
 
 - 微信：javazhangyi
-- 邮件：javazhangyi[@163.com ](/163.com ) 
+- 邮件：javazhangyi[@163.com ](/163.com )
+
+
+
+![](https://i.postimg.cc/JhrtvFkJ/Wechat-IMG1280.jpg)
+
+<center><h3>来杯咖啡</h3></center>
