@@ -7,6 +7,8 @@
 - 5、开发者定义业务异常维度不够，容易误报漏报服务异常
 - 6、日志代码散落在各个角落，代码不够精简，项目难以维护
 
+此插件可以解决以上问题
+
 ## 什么是bpm
 bpm 是 Business Performance Management 缩写，log-agent-framework是bpm 的实现，它是一款日志中间是一款基于java agent 的日志插件，用于结构化输出日志数据，便于后期的问题排查，以及业务的报警；通过maven接入，将spring 项目的日志以json输出。
 ## 产品定位
@@ -23,8 +25,6 @@ bpm 是 Business Performance Management 缩写，log-agent-framework是bpm 的�
 - 对于程序开发：提供公共位置的日志收集，加快开发进度
 - 对于问题排查：采用标准的日志格式，可根据类型快速过滤排查
 - 对于项目预警：采用模块化+api，可自定操作
-## 什么是日志数据
-    它是刻意产生，并且有目的搬运、清洗、存贮，最终消费的信息流，为用户提供更好的服务；并不是所有的日志都是日志数据，对用户有意义的日志，并且耗费精力维护，才能称为日志数据。
 ## 什么时候用
 
 -  后端开发人员排查bug，定位问题
@@ -46,7 +46,12 @@ bpm 是 Business Performance Management 缩写，log-agent-framework是bpm 的�
 | 阿里日志服务 | 大型 | 小于3天 |
 
 ### Bpm日志数据结构
+![logJson.png](img%2FlogJson.png)
+
 ### 日志层次划分
+
+针对整个系统而言，开发者主要系统三个层次的日志；系统入口层的日志、系统出口层的日志、用户自定义的日志；下面表示各个层次日志的代表
+
 | 层次 | 例子 | 日志type |
 | --- | --- | --- |
 | 入口日志 | controller、httpServlet | ACCESS |
@@ -54,21 +59,11 @@ bpm 是 Business Performance Management 缩写，log-agent-framework是bpm 的�
 | 用户自定义日志 | service、自定义log | SERVICE |
 
 ### 日志aop 切面
-| 切面 | 例子 |  |
-| --- | --- | --- |
-| 类上的注解切面 | [@RestController ](/RestController ) |  |
-| 方法上的注解切面 | [@RequestMapping ](/RequestMapping )
-[@PostMapping ](/PostMapping )
-[@GetMapping ](/GetMapping )
-[@DeleteMapping ](/DeleteMapping )
-[@PutMapping ](/PutMapping ) |  |
-| 正则切面 | "^com.bb.bbfff.code.util.HttpUtils$:THIRD": !!seq
-- "[a-zA-Z].*" |  |
-  | 精确切面 |  |  |
-
-
-```
-```
+| 切面 | 例子 |
+| --- | --- |
+| 类上的注解切面 | @RestController  |
+| 方法上的注解切面 | @RequestMapping @PostMapping |
+| 正则切面 | "^com.bb.bbfff.code.util.HttpUtils$:THIRD": !!seq|
 精确切面 配置
 @HOOk
 instruments：array【injectionClass】
@@ -100,7 +95,32 @@ String executeTime = LogUtils.getContext(method.toString());
 executeTime = String.valueOf(System.currentTimeMillis() - Long.parseLong(executeTime));
 LogUtils.hessianLog(executeTime, t, ret, method, args);
 }
-```
+
+Hook 参数配置
+
+| key                                  | 说明                                                         | 默认值                             |
+| ------------------------------------ | ------------------------------------------------------------ | ---------------------------------- |
+| `promagent.fastHooks.scheduledPack`  | 默认收集定时任务日志`收集该包下的@scheduled`                 | null                               |
+| `promagent.agent.appName`            | 项目名                                                       | appName                            |
+| `promagent.agent.callClass`          | 回调class                                                    | `com.cyou.agent.core.Logger`       |
+| `promagent.agent.debug`              | classLoader 调试                                             | false                              |
+| `promagent.agent.headers`            | 收集headers，all：收集全部header，none：不收集，headerA:headerB:headerC：收集header列表 | `Arrays.asList<"none">`            |
+| `promagent.agent.ignoreSignatures`   | 不收集方法集合日志                                           | `new ArrayList<String>`            |
+| `promagent.agent.mdcLogId`           | 传递到Mdc 中的 LogId                                         | access_id                          |
+| `promagent.agent.retMaxLength`       | 收集ret 最大长度                                             | 默认20480                          |
+| `promagent.agent.skipRetSignatures`  | 不收集放回的值的方法签名集合                                 | `new ArrayList<String>`            |
+| `promagent.agent.traceId`            | 传递到其他项目的LogId                                        | X-REQUEST-ID                       |
+| `promagent.fastHooks.controllerPack` | 默认收集controller日志，收集该包下的@RequestMapping、@PostMapping、@GetMapping、@DeleteMapping、[@PutMapping ](/PutMapping ) |                                    |
+| 日志                                 | null                                                         |                                    |
+| `promagent.fastHooks.scheduledPack`  | 默认收集定时任务日志，收集该包下的[@scheduled ](/scheduled ) | null                               |
+| `promagent.hooks.annClassHook`       | 类注解回调[@Controller ](/Controller )                       | `new HashMap<String,List<String>>` |
+| `promagent.hooks.annMethodHook`      | 方法注解回调Hook 例如：[@RequestMapping ](/RequestMapping )  | `new HashMap<String,List<String>>` |
+| `promagent.hooks.annRegHook`         | 正则回调，详细例子见 com.cyou:log-agent-load中的 hook.yml 配置文件 | `new HashMap<String,List<String>>` |
+| `promagent.load.agentJar`            | 加载agentJar 路径                                            | null                               |
+| `promagent.load.result`              | 加载结果，true：加载成功，false：加载失败                    | false                              |
+| `promagent.load.time`                | 加载agent 花费时间                                           | -1                                 |
+
+
 
 callbackMethodName和callbackFrameErrorMethodName传递参数类型
 
@@ -113,31 +133,8 @@ callbackMethodName和callbackFrameErrorMethodName传递参数类型
 | arguments   | Object[]  | 方法参数 |
 ```
 
-### hook配置
-| key | 说明 | 默认值 |
-| --- | --- | --- |
-| `promagent.fastHooks.scheduledPack` | 默认收集定时任务日志`收集该包下的@scheduled` | null |
-| `promagent.agent.appName` | 项目名 | appName |
-| `promagent.agent.callClass` | 回调class | `com.cyou.agent.core.Logger` |
-| `promagent.agent.debug` | classLoader 调试 | false |
-| `promagent.agent.headers` | 收集headers，all：收集全部header，none：不收集，headerA:headerB:headerC：收集header列表 | `Arrays.asList<"none">` |
-| `promagent.agent.ignoreSignatures` | 不收集方法集合日志 | `new ArrayList<String>` |
-| `promagent.agent.mdcLogId` | 传递到Mdc 中的 LogId | access_id |
-| `promagent.agent.retMaxLength` | 收集ret 最大长度 | 默认20480 |
-| `promagent.agent.skipRetSignatures` | 不收集放回的值的方法签名集合 | `new ArrayList<String>` |
-| `promagent.agent.traceId` | 传递到其他项目的LogId | X-REQUEST-ID |
-| `promagent.fastHooks.controllerPack` | 默认收集controller日志，收集该包下的@RequestMapping、@PostMapping、@GetMapping、@DeleteMapping、[@PutMapping ](/PutMapping )
- 日志  | null |
-| `promagent.fastHooks.scheduledPack` | 默认收集定时任务日志，收集该包下的[@scheduled ](/scheduled ) | null |
-| `promagent.hooks.annClassHook` | 类注解回调[@Controller ](/Controller ) | `new HashMap<String,List<String>>` |
-| `promagent.hooks.annMethodHook` | 方法注解回调Hook 例如：[@RequestMapping ](/RequestMapping ) | `new HashMap<String,List<String>>` |
-| `promagent.hooks.annRegHook` | 正则回调，详细例子见 com.cyou:log-agent-load中的 hook.yml 配置文件 | `new HashMap<String,List<String>>` |
-| `promagent.load.agentJar` | 加载agentJar 路径 | null |
-| `promagent.load.result` | 加载结果，true：加载成功，false：加载失败 | false |
-| `promagent.load.time` | 加载agent 花费时间 | -1 |
-
-
 ### 正则收集例子
+
 ```yaml
 # hook 文件模板
 #annMethodHook:                                                               # 方法注解日志打印
@@ -240,6 +237,6 @@ _备注：更多配置文件先hook 说明_
 
 
 
-![](https://i.postimg.cc/JhrtvFkJ/Wechat-IMG1280.jpg)
+![wechatPay.jpg](img%2FwechatPay.jpg)
 
-<center><h3>来杯咖啡</h3></center>
+<center><h1>来杯咖啡</h1></center>
